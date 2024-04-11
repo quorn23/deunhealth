@@ -1,10 +1,10 @@
 # Sets linux/amd64 in case it's not injected by older Docker versions
 ARG BUILDPLATFORM=linux/amd64
 
-ARG ALPINE_VERSION=3.15
-ARG GO_VERSION=1.17
-ARG XCPUTRANSLATE_VERSION=v0.6.0
-ARG GOLANGCI_LINT_VERSION=v1.45.2
+ARG ALPINE_VERSION=3.19
+ARG GO_VERSION=1.22.2
+ARG XCPUTRANSLATE_VERSION=v0.8.0
+ARG GOLANGCI_LINT_VERSION=v1.57.2
 
 FROM --platform=${BUILDPLATFORM} qmcgaw/xcputranslate:${XCPUTRANSLATE_VERSION} AS xcputranslate
 FROM --platform=${BUILDPLATFORM} qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
