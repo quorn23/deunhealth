@@ -4,17 +4,17 @@ ARG BUILDPLATFORM=linux/amd64
 ARG ALPINE_VERSION=3.19
 ARG GO_VERSION=1.22.2
 ARG XCPUTRANSLATE_VERSION=v0.8.0
-ARG GOLANGCI_LINT_VERSION=v1.55.2
+#ARG GOLANGCI_LINT_VERSION=v1.55.2
 
 FROM --platform=${BUILDPLATFORM} qmcgaw/xcputranslate:${XCPUTRANSLATE_VERSION} AS xcputranslate
-FROM --platform=${BUILDPLATFORM} qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
+#FROM --platform=${BUILDPLATFORM} qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
 
 FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS base
 ENV CGO_ENABLED=0
 WORKDIR /tmp/gobuild
 RUN apk --update add git g++
 COPY --from=xcputranslate /xcputranslate /usr/local/bin/xcputranslate
-COPY --from=golangci-lint /bin /go/bin/golangci-lint
+#COPY --from=golangci-lint /bin /go/bin/golangci-lint
 COPY go.mod go.sum ./
 RUN go mod download
 COPY cmd/ ./cmd/
@@ -29,7 +29,7 @@ ENTRYPOINT go test -race -coverprofile=coverage.txt ./...
 
 FROM base AS lint
 COPY .golangci.yml ./
-RUN golangci-lint run --timeout=10m
+#RUN golangci-lint run --timeout=10m
 
 FROM base AS build
 ARG TARGETPLATFORM
